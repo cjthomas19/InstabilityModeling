@@ -14,7 +14,7 @@ axis([-1,1,-1,1,-1,1])
 ax = gca;
 ax.NextPlot = "replaceChildren";
 
-v = VideoWriter('newfile2.avi','Uncompressed AVI');
+v = VideoWriter('Videos\newfile2.avi','Uncompressed AVI');
 open(v);
 
 
