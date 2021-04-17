@@ -1,3 +1,5 @@
+clear;
+
 syms t th z(th, t)
 theta = linspace(0, 2*pi, 10);
 
