@@ -19,15 +19,15 @@ syms p s a b c d mu nu NN ps(s) psp(s)
 eq1 = (p-a+4*mu*sin(pi*s/NN)^2)*(p - d + 4*nu *sin(pi*s/NN)^2) == b * c;
 p = solve(eq1, p);
 
-ps(s) = simplify(subs(p(1), [a,b,c,d,mu,nu,NN],[1,-4,1,-2,10,250,N]));
-psp(s) = simplify(subs(p(2), [a,b,c,d,mu,nu,NN],[1,-4,1,-2,10,250,N]));
+ps(s) = simplify(subs(p(1), [a,b,c,d,mu,nu,NN],[1,-4,1,-2,1,25,N]));
+psp(s) = simplify(subs(p(2), [a,b,c,d,mu,nu,NN],[1,-4,1,-2,1,25,N]));
 
 ps = double(ps(1:N));
 psp = double(psp(1:N));
 
 zs = zeros(1,N);
 ns = zeros(1,N);
-b = -.4;
+b = -4;
 
 v = VideoWriter("FFT_test.mp4","MPEG-4");
 open(v);
