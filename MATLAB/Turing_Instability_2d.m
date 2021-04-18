@@ -1,17 +1,16 @@
 clear;
 
-size = 500;
+size = 100;
 x = 1:size;
 y = 1:size;
 
 [my,mx] = meshgrid(y,x);
 
-%M1 = (rand(size,size)-.5)*.05;
-%M2 = (rand(size,size)-.5)*.05;
-cn = dsp.ColoredNoise
+M1 = (rand(size,size)-.5)*.2;
+M2 = (rand(size,size)-.5)*.2;
 
-M1 = wgn(size, size, -40);
-M2 = wgn(size, size, -40);
+%M1 = wgn(size, size, -40);
+%M2 = wgn(size, size, -40);
 
 fig = figure;
 
@@ -24,17 +23,17 @@ open(v);
 
 
 
-tstep = .01;
-numframes = 225;
+tstep = .1;
+numframes = 1000;
 trange = 0:tstep:numframes*tstep;
 
 a = 1;
-b = -8;
-c = 1;
-d = -4;
+b = -1;
+c = 1/.1;
+d = -1/.1;
 
-mu = .5;
-nu = 25;
+mu = .00028;
+nu = .005/.1;
 
 
 for t=trange
@@ -43,6 +42,11 @@ for t=trange
     
     L1 = del2(M1);
     L2 = del2(M2);
+    
+    L1(1,:) = 0;
+    L1(end,:) = 0;
+    L2(1,:) = 0;
+    L2(end,:) = 0;
     
     for ix=1:size
         
@@ -63,11 +67,8 @@ for t=trange
             elseif iy == size
                 upy = 1;
             end
-            M1_d(ix,iy) = a * M1(ix,iy) + b * M2(ix,iy) + mu * ((M1(downx,iy) - 2 * M1(ix,iy) + M1(upx,iy))+(M1(ix,downy) - 2 * M1(ix,iy) + M1(ix,upy)));
-            
-            %M1_d(ix,iy) = a * M1(ix,iy) + b * M2(ix,iy) + mu * L1(ix,iy);
-            M2_d(ix,iy) = c * M1(ix,iy) + d * M2(ix,iy) + nu * ((M2(downx,iy) - 2 * M2(ix,iy) + M2(upx,iy))+(M2(ix,downy) - 2 * M2(ix,iy) + M2(ix,upy)));
-            %M2_d(ix,iy) = c * M1(ix,iy) + d * M2(ix,iy) + nu * L2(ix,iy);
+            M1_d(ix,iy) = a * (M1(ix,iy)-M1(ix,iy).^3) + b * M2(ix,iy) + mu * ((M1(downx,iy)+M1(upx,iy)+M1(ix,downy)+M1(ix,upy))/4 - M1(ix,iy));
+            M2_d(ix,iy) = c * M1(ix,iy) + d * M2(ix,iy) + nu * ((M2(downx,iy)+M2(upx,iy)+M2(ix,downy)+M2(ix,upy))/4 - M2(ix,iy));
         end
     end
     
@@ -78,6 +79,8 @@ for t=trange
     s = surf(M1, min(max(M1, -1), 1)./max(max(M1)));
     s.EdgeColor = 'none';
     axis([0,size,0,size,-1,1]);
+    title("t = " + t);
+    colormap autumn
     %col = colorbar;
     writeVideo(v,getframe(fig));
     
