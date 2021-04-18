@@ -1,20 +1,24 @@
 clear;
 
-size = 100;
+size = 500;
 x = 1:size;
 y = 1:size;
 
 [my,mx] = meshgrid(y,x);
 
-M1 = (rand(size,size)-.5)*.05;
-M2 = (rand(size,size)-.5)*.05;
+%M1 = (rand(size,size)-.5)*.05;
+%M2 = (rand(size,size)-.5)*.05;
+cn = dsp.ColoredNoise
+
+M1 = wgn(size, size, -40);
+M2 = wgn(size, size, -40);
 
 fig = figure;
 
 ax = gca;
 ax.NextPlot = "replaceChildren";
 
-v = VideoWriter('Videos\2d_no_diff.mp4','MPEG-4');
+v = VideoWriter('Videos\2d_noise.mp4','MPEG-4');
 v.FrameRate = 40;
 open(v);
 
@@ -71,8 +75,9 @@ for t=trange
     M2 = M2 + M2_d * tstep;
     
     %imagesc(M1,[-1,1]);
-    surf(M1, min(max(M1, -1), 1)./max(max(M1)))
-    axis([0,100,0,100,-1,1]);
+    s = surf(M1, min(max(M1, -1), 1)./max(max(M1)));
+    s.EdgeColor = 'none';
+    axis([0,size,0,size,-1,1]);
     %col = colorbar;
     writeVideo(v,getframe(fig));
     
