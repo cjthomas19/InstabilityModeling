@@ -1,7 +1,7 @@
 clear;
 
 syms t th z(th, t)
-theta = linspace(0, 2*pi, 10);
+theta = linspace(0, 2*pi, 100);
 
 x = cos(theta);
 y = sin(theta);
