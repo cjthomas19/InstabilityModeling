@@ -14,7 +14,7 @@ fig = figure;
 ax = gca;
 ax.NextPlot = "replaceChildren";
 
-v = VideoWriter('Videos\2d_no_diff.avi','Uncompressed AVI');
+v = VideoWriter('Videos\2d_no_diff.mp4','MPEG-4');
 v.FrameRate = 40;
 open(v);
 
